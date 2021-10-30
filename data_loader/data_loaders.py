@@ -15,5 +15,5 @@ class CorrelationDataLoader(BaseDataLoader):
             ToTensor(),
         ])
         self.data_dir = data_dir
-        self.dataset = CorrelationDataset(self.data_dir, trsfm)
+        self.dataset = CorrelationDataset(self.data_dir, transform=trsfm, training=training)
         super().__init__(self.dataset, batch_size, shuffle, validation_split, num_workers)

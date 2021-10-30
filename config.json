@@ -26,8 +26,11 @@
     },
     "loss": "MSELoss",
     "metrics": [
-        "acc",
-        "mape"
+        "mae",
+        "mape",
+        "rmse",
+        "msle",
+        "rmsle"
     ],
     "lr_scheduler": {
         "type": "StepLR",

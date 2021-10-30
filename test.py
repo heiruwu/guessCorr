@@ -18,7 +18,7 @@ def main(config):
         shuffle=False,
         validation_split=0.0,
         training=False,
-        num_workers=2
+        num_workers=1
     )
 
     # build model architecture
@@ -41,12 +41,15 @@ def main(config):
     model = model.to(device)
     model.eval()
 
+    logger.info('Done')
+    logger.info('Testing set samples: {} '.format(len(data_loader.dataset)))
+
     total_loss = 0.0
     total_metrics = torch.zeros(len(metric_fns))
 
     with torch.no_grad():
-        for i, (data, target) in enumerate(tqdm(data_loader)):
-            data, target = data.to(device), target.to(device)
+        for i, sample_batch in enumerate(tqdm(data_loader)):
+            data, target = sample_batch['image'].to(device), sample_batch['correlations'].to(device)
             output = model(data)
 
             #
@@ -65,7 +68,7 @@ def main(config):
     log.update({
         met.__name__: total_metrics[i].item() / n_samples for i, met in enumerate(metric_fns)
     })
-    logger.info(log)
+    logger.info('Testing result:\n{}'.format(log))
 
 
 if __name__ == '__main__':
