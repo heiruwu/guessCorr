@@ -1,12 +1,10 @@
-# Piccollage take home quiz
-
-## guess the correlation
-### data inspection
+# guess the correlation
+## data inspection
 a pretty normal distribution
 
 ![dist](https://github.com/gt212345/piccollage/blob/main/materials/dist.png?raw=true)
 
-### train/val/test split
+## train/val/test split
 splitting amount
 ```bash
 .dataset:                150000 instances
@@ -15,7 +13,7 @@ splitting amount
 ├─20%─testing             30000 instances
 
 ```
-after a rough glance at the dataset distribution, I considered the dataset is pretty normal distributed and has enough instances to keep the variance low after 80/20 splitting.
+after a rough glance at the dataset distribution, considered the dataset is pretty normal distributed and has enough instances to keep the variance low after 80/20 splitting.
 
 splitting method
 ```python
@@ -50,7 +48,7 @@ def _split_dataset(self, split, training=True):
     return dataset
 ```
 training/validation splitting uses the same logic
-### model inspection
+## model inspection
 ```bash
 CorrelationModel(
   (features): Sequential(
@@ -93,7 +91,7 @@ CorrelationModel(
 )
 Trainable parameters: 47777
 ```
-### loss function
+## loss function
 the loss function of choice is smooth_l1, which has the advantages of both l1 and l2 loss
 ```python
 def SmoothL1(yhat, y):                                                  <--- final choice
@@ -112,7 +110,7 @@ def RMSLELoss(yhat, y):
     return torch.sqrt(MSELoss(torch.log(yhat + 1), torch.log(y + 1)))
 
 ```
-### evaluation metric
+## evaluation metric
 ```python
 def mse(output, target):
     # mean square error
@@ -157,7 +155,7 @@ def rmsle(output, target):
     return rmsle / len(target)
 ```
 
-### training result
+## training result
 ```bash
 trainer - INFO -     epoch          : 1
 trainer - INFO -     smooth_l1loss  : 0.0029358651146370296
@@ -222,7 +220,7 @@ trainer - INFO - Validation performance didn't improve for 2 epochs. Training st
 ```
 loss graph
 ![dist](https://github.com/gt212345/guessCorr/blob/main/materials/loss.png?raw=true)
-### testing result
+## testing result
 ```bash
 Loading checkpoint: saved/models/correlation/model_best.pth ...
 Done
