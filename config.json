@@ -24,8 +24,9 @@
             "amsgrad": true
         }
     },
-    "loss": "MSELoss",
+    "loss": "SmoothL1",
     "metrics": [
+        "mse",
         "mae",
         "mape",
         "rmse",

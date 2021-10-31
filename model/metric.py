@@ -11,6 +11,13 @@ def acc(output, target):
         correct = torch.sum(abs(target-output) <= 0.05).item()
     return correct / len(target)
 
+def mse(output, target):
+    # mean square error
+    with torch.no_grad():
+        assert output.shape[0] == len(target)
+        mae = torch.sum(MSELoss(output, target)).item()
+    return mae / len(target)
+
 def mae(output, target):
     # mean absolute error
     with torch.no_grad():

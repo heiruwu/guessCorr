@@ -94,8 +94,12 @@ CorrelationModel(
 Trainable parameters: 47777
 ```
 ### loss function
+the loss function of choice is smooth_l1, which has the advantages of both l1 and l2 loss
 ```python
-def MSELoss(yhat, y):                                                  <--- final choice
+def SmoothL1(yhat, y):                                                  <--- final choice
+    return torch.nn.functional.smooth_l1_loss(yhat, y)
+
+def MSELoss(yhat, y):
     return torch.nn.functional.mse_loss(yhat, y)
 
 def RMSELoss(yhat, y):
@@ -110,6 +114,13 @@ def RMSLELoss(yhat, y):
 ```
 ### evaluation metric
 ```python
+def mse(output, target):
+    # mean square error
+    with torch.no_grad():
+        assert output.shape[0] == len(target)
+        mae = torch.sum(MSELoss(output, target)).item()
+    return mae / len(target)
+
 def mae(output, target):
     # mean absolute error
     with torch.no_grad():
@@ -147,21 +158,22 @@ def rmsle(output, target):
 ```
 
 ### training result
-
 ```bash
 trainer - INFO -     epoch          : 1
-trainer - INFO -     loss           : 0.006033351296714197
-trainer - INFO -     mae            : 0.04644732211530209
-trainer - INFO -     mape           : 0.7897534126540026
-trainer - INFO -     rmse           : 0.0009079981798810573
-trainer - INFO -     msle           : 0.00029857408025782205
-trainer - INFO -     rmsle          : 0.001693601704862279
-trainer - INFO -     val_loss       : 0.001081485502111415
-trainer - INFO -     val_mae        : 0.02543863166371981
-trainer - INFO -     val_mape       : 0.43928909466663996
-trainer - INFO -     val_rmse       : 0.0005114987251193573
-trainer - INFO -     val_msle       : 9.465186867843538e-05
-trainer - INFO -     val_rmsle      : 0.0010227298852987588
+trainer - INFO -     smooth_l1loss  : 0.0029358651146370296
+trainer - INFO -     mse            : 9.174910654958997e-05
+trainer - INFO -     mae            : 0.04508562459920844
+trainer - INFO -     mape           : 0.6447089369893074
+trainer - INFO -     rmse           : 0.0008826211761528006
+trainer - INFO -     msle           : 0.0002885178522810747
+trainer - INFO -     rmsle          : 0.0016459243478796756
+trainer - INFO -     val_loss       : 0.000569225614812846
+trainer - INFO -     val_mse        : 1.7788300462901436e-05
+trainer - INFO -     val_mae        : 0.026543946107228596
+trainer - INFO -     val_mape       : 0.48582320946455004
+trainer - INFO -     val_rmse       : 0.0005245986936303476
+trainer - INFO -     val_msle       : 9.091730712680146e-05
+trainer - INFO -     val_rmsle      : 0.0009993902465794235
                     .
                     .
                     .
@@ -169,18 +181,20 @@ trainer - INFO -     val_rmsle      : 0.0010227298852987588
                     .
                     .
 trainer - INFO -     epoch          : 7                           <--- final model
-trainer - INFO -     loss           : 0.0003257902914095515
-trainer - INFO -     mae            : 0.014013349408904712
-trainer - INFO -     mape           : 0.2682989962026477
-trainer - INFO -     rmse           : 0.00027973901535733605
-trainer - INFO -     msle           : 3.3442232215747935e-05
-trainer - INFO -     rmsle          : 0.0005611276037816424
-trainer - INFO -     val_loss       : 0.00037339228950440884
-trainer - INFO -     val_mae        : 0.014986828123529751
-trainer - INFO -     val_mape       : 0.26452333776156106
-trainer - INFO -     val_rmse       : 0.00030040072995082785
-trainer - INFO -     val_msle       : 4.145120674487164e-05
-trainer - INFO -     val_rmsle      : 0.0006239583902060985
+trainer - INFO -     smooth_l1loss  : 0.00017805844737449661
+trainer - INFO -     mse            : 5.564326480453019e-06
+trainer - INFO -     mae            : 0.01469234253714482
+trainer - INFO -     mape           : 0.2645472921580076
+trainer - INFO -     rmse           : 0.0002925463738307978
+trainer - INFO -     msle           : 3.3151906652316634e-05
+trainer - INFO -     rmsle          : 0.0005688522928685416
+trainer - INFO -     val_loss       : 0.00017794455110561102
+trainer - INFO -     val_mse        : 5.560767222050344e-06
+trainer - INFO -     val_mae        : 0.014510956528286139
+trainer - INFO -     val_mape       : 0.25059283276398975
+trainer - INFO -     val_rmse       : 0.0002930224982944007
+trainer - INFO -     val_msle       : 3.403802761204133e-05
+trainer - INFO -     val_rmsle      : 0.0005525556141122554
 trainer - INFO - Saving checkpoint: saved/models/correlation/1031_043742/checkpoint-epoch7.pth ...
 trainer - INFO - Saving current best: model_best.pth ...
                     .
@@ -190,20 +204,24 @@ trainer - INFO - Saving current best: model_best.pth ...
                     .
                     .
 trainer - INFO -     epoch          : 10                           <--- early stop
-trainer - INFO -     loss           : 0.00030936458103436354
-trainer - INFO -     mae            : 0.013654345855737725
-trainer - INFO -     mape           : 0.2527313926269611
-trainer - INFO -     rmse           : 0.0002726934728755926
-trainer - INFO -     msle           : 3.264761346902863e-05
-trainer - INFO -     rmsle          : 0.0005503339679174435
-trainer - INFO -     val_loss       : 0.00048039960558526217
-trainer - INFO -     val_mae        : 0.017462029221157232
-trainer - INFO -     val_mape       : 0.28779067628582317
-trainer - INFO -     val_rmse       : 0.0003408467676490545
-trainer - INFO -     val_msle       : 4.472730096798235e-05
-trainer - INFO -     val_rmsle      : 0.0006782710350429019
+trainer - INFO -     smooth_l1loss  : 0.00014610137016279624
+trainer - INFO -     mse            : 4.565667817587382e-06
+trainer - INFO -     mae            : 0.013266990386570494
+trainer - INFO -     mape           : 0.24146838792661826
+trainer - INFO -     rmse           : 0.00026499629460158757
+trainer - INFO -     msle           : 2.77259079665176e-05
+trainer - INFO -     rmsle          : 0.0005148174095957074
+trainer - INFO -     val_loss       : 0.00018394086218904705
+trainer - INFO -     val_mse        : 5.74815194340772e-06
+trainer - INFO -     val_mae        : 0.01494487459709247
+trainer - INFO -     val_mape       : 0.27262411576509477
+trainer - INFO -     val_rmse       : 0.0002979971170425415
+trainer - INFO -     val_msle       : 3.1850282267744966e-05
+trainer - INFO -     val_rmsle      : 0.0005451643197642019
 trainer - INFO - Validation performance didn't improve for 2 epochs. Training stops.
 ```
+loss graph
+![dist](https://github.com/gt212345/guessCorr/blob/main/materials/loss.png?raw=true)
 ### testing result
 ```bash
 Loading checkpoint: saved/models/correlation/model_best.pth ...
@@ -211,7 +229,5 @@ Done
 Testing set samples: 30000
 100%|█████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 59/59 [00:19<00:00,  3.04it/s]
 Testing result:
-{'loss': 0.0003678673184632013, 'mae': 0.014900806681315104, 'mape': 0.31981751302083333, 'rmse': 3.768852154413859e-05, 'msle': 4.456466436386108e-06, 'rmsle': 8.922487099965414e-05}
+{'loss': 0.0001722179292468354, 'mse': 6.77461177110672e-07, 'mae': 0.014289384969075522, 'mape': 0.2813985677083333, 'rmse': 3.6473782857259115e-05, 'msle': 3.554690380891164e-06, 'rmsle': 7.881066799163819e-05}
 ```
-
-## recommending stickers

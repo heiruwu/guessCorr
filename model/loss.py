@@ -1,6 +1,9 @@
 import torch
 
 
+def SmoothL1(yhat, y):
+    return torch.nn.functional.smooth_l1_loss(yhat, y)
+
 def MSELoss(yhat, y):
     return torch.nn.functional.mse_loss(yhat, y)
 
