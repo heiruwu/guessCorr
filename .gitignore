@@ -136,3 +136,6 @@ saved/
 
 # vscode
 .vscode/
+
+# csv
+*.csv
