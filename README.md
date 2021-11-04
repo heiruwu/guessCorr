@@ -13,7 +13,7 @@ splitting amount
 ├─20%─testing             30000 instances
 
 ```
-after a rough glance at the dataset distribution, considered the dataset is pretty normal distributed and has enough instances to keep the variance low after 80/20 splitting.
+after a rough glance at the dataset distribution, considered the dataset is pretty normal distributed and has enough instances to keep the variance low after 80/20 splitting, I do exactly that.
 
 splitting method
 ```python
